@@ -4,6 +4,7 @@ let tamanho;
 let cor;
 
 let pontos = 0;
+let recorde = 0;
 
 let forma = [];
 
@@ -21,10 +22,12 @@ function draw() {
   fill(cor);
   desenharForma();
 
-  // Mostra a pontuação
+  // Mostra a pontuação e o recorde
   fill(100);
   textSize(18);
+
   text("Pontos: " + pontos, 20, 30);
+  text("Recorde: " + recorde, 130, 30);
 }
 
 
@@ -97,6 +100,11 @@ function mousePressed() {
   if (distancia < tamanho) {
 
     pontos++;
+
+    // Atualiza o recorde
+    if (pontos > recorde) {
+      recorde = pontos;
+    }
 
     novaForma();
   }
