@@ -1,3 +1,4 @@
+
 let x;
 let y;
 let tamanho;
@@ -11,6 +12,9 @@ let forma = [];
 function setup() {
   createCanvas(windowWidth, windowHeight);
   noStroke();
+
+  // Recupera o recorde salvo no navegador
+  recorde = Number(localStorage.getItem("recordeJogo")) || 0;
 
   novaForma();
 }
@@ -33,7 +37,6 @@ function draw() {
 
 // CRIA UMA NOVA FORMA
 function novaForma() {
-
   tamanho = random(60, 140);
 
   x = random(tamanho, width - tamanho);
@@ -50,7 +53,6 @@ function novaForma() {
   let quantidadePontos = 12;
 
   for (let i = 0; i < quantidadePontos; i++) {
-
     let angulo = map(
       i,
       0,
@@ -71,11 +73,9 @@ function novaForma() {
 
 // DESENHA A FORMA
 function desenharForma() {
-
   beginShape();
 
   for (let ponto of forma) {
-
     let px = x + cos(ponto.angulo) * ponto.raio;
     let py = y + sin(ponto.angulo) * ponto.raio;
 
@@ -88,7 +88,6 @@ function desenharForma() {
 
 // QUANDO O JOGADOR CLICA
 function mousePressed() {
-
   let distancia = dist(
     mouseX,
     mouseY,
@@ -98,12 +97,16 @@ function mousePressed() {
 
   // ACERTO
   if (distancia < tamanho) {
-
     pontos++;
 
-    // Atualiza o recorde
+    // Atualiza e salva o recorde
     if (pontos > recorde) {
       recorde = pontos;
+
+      localStorage.setItem(
+        "recordeJogo",
+        String(recorde)
+      );
     }
 
     novaForma();
@@ -111,7 +114,6 @@ function mousePressed() {
 
   // ERRO
   else {
-
     pontos = 0;
 
     novaForma();
@@ -121,7 +123,6 @@ function mousePressed() {
 
 // AJUSTA A TELA
 function windowResized() {
-
   resizeCanvas(windowWidth, windowHeight);
 
   novaForma();
