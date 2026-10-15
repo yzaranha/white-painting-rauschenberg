@@ -29,22 +29,23 @@ function draw() {
   // Mostra a pontuação e o recorde
   fill(100);
   textSize(18);
-
   text("Pontos: " + pontos, 20, 30);
   text("Recorde: " + recorde, 130, 30);
 }
-
 
 // CRIA UMA NOVA FORMA
 function novaForma() {
   tamanho = random(60, 140);
 
-  x = random(tamanho, width - tamanho);
-  y = random(tamanho, height - tamanho);
+  // Evita que a forma ultrapasse os limites da tela
+  let margemX = min(tamanho, width / 2);
+  let margemY = min(tamanho, height / 2);
+
+  x = random(margemX, width - margemX);
+  y = random(margemY, height - margemY);
 
   // A cada acerto, a cor fica mais próxima do branco
   let intensidade = min(253, 230 + pontos * 2);
-
   cor = color(intensidade);
 
   // Cria os pontos da forma
@@ -70,7 +71,6 @@ function novaForma() {
   }
 }
 
-
 // DESENHA A FORMA
 function desenharForma() {
   beginShape();
@@ -85,9 +85,15 @@ function desenharForma() {
   endShape(CLOSE);
 }
 
-
 // QUANDO O JOGADOR CLICA
 function mousePressed() {
+  // Solicita tela cheia no primeiro clique,
+  // se o navegador ainda não estiver nesse modo.
+  if (!fullscreen()) {
+    fullscreen(true);
+    return false;
+  }
+
   let distancia = dist(
     mouseX,
     mouseY,
@@ -115,15 +121,14 @@ function mousePressed() {
   // ERRO
   else {
     pontos = 0;
-
     novaForma();
   }
-}
 
+  return false;
+}
 
 // AJUSTA A TELA
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
-
   novaForma();
 }
